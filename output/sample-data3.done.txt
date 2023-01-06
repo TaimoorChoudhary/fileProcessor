@@ -1,0 +1,1 @@
+Sales Summary [Seller Count = 2, Client Count = 2, Highest Sale Id = '01', Lowest Sales Seller = 'Martin3']

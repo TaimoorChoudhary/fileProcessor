@@ -1,0 +1,11 @@
+#Disable batch job's auto start
+#spring.batch.job.enabled: false
+logging:
+  level:
+    org.processor: DEBUG
+
+batchJob:
+  input: input
+  output: output2
+  error: errorFiles
+  cron: 0 */10 * * * ?
