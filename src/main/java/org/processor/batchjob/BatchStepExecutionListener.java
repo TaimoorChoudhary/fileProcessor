@@ -7,6 +7,9 @@ import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.stereotype.Component;
 
+/**
+ * Listener provides access context before and after step execution.
+ */
 @Slf4j
 @Component
 public class BatchStepExecutionListener implements StepExecutionListener {

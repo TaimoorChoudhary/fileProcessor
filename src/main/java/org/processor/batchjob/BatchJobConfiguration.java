@@ -29,6 +29,9 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
+/**
+ * Contains configuration for Batch job.
+ */
 @Slf4j
 @Configuration
 @EnableBatchProcessing
@@ -41,10 +44,10 @@ public class BatchJobConfiguration {
   public StepBuilderFactory stepBuilderFactory;
 
   @Autowired
-  private FlatFileItemReader<Object> personItemReader;
+  private FlatFileItemReader<Object> fileItemReader;
 
   @Autowired
-  private FlatFileItemWriter<SalesSummary> personItemWriter;
+  private FlatFileItemWriter<SalesSummary> fileItemWriter;
 
   @Autowired
   private FileCleanUpService fileCleanUpService;
@@ -59,19 +62,19 @@ public class BatchJobConfiguration {
   private String outputFolder;
 
   @Bean
-  public Job importUserJob(Step step1) {
-    return jobBuilderFactory.get("importUserJob")
+  public Job fileProcessingJob(Step step1) {
+    return jobBuilderFactory.get("fileProcessingJob")
         .incrementer(new RunIdIncrementer())
         .flow(masterStep())
         .on("*")
-        .to(step2())
+        .to(fileCleanUpStep())
         .end()
         .build();
   }
   @Bean("partitioner")
   @StepScope
   public Partitioner partitioner() {
-    log.info("In Partitioner");
+    log.info("Partitioner Started");
 
     MultiResourcePartitioner partitioner = new MultiResourcePartitioner();
     ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
@@ -80,8 +83,7 @@ public class BatchJobConfiguration {
 
       resources = resolver.getResources("file:" + inputFolder + "/*.txt");
     } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+      log.error(e.getMessage());
     }
     partitioner.setResources(resources);
     partitioner.partition(10);
@@ -95,18 +97,18 @@ public class BatchJobConfiguration {
   }
 
   @Bean
-  public Step step1() {
-    return stepBuilderFactory.get("step1")
+  public Step fileProcessorStep() {
+    return stepBuilderFactory.get("fileProcessorStep")
         .<Object, SalesSummary>chunk(10)
-        .reader(personItemReader)
+        .reader(fileItemReader)
         .processor(processor())
-        .writer(personItemWriter)
+        .writer(fileItemWriter)
         .build();
   }
 
   @Bean
-  public Step step2() {
-    return stepBuilderFactory.get("step2")
+  public Step fileCleanUpStep() {
+    return stepBuilderFactory.get("fileCleanUpStep")
         .tasklet(fileCleanUpService)
         .build();
   }
@@ -125,8 +127,8 @@ public class BatchJobConfiguration {
   @Qualifier("masterStep")
   public Step masterStep() {
     return stepBuilderFactory.get("masterStep")
-        .partitioner("step1", partitioner())
-        .step(step1())
+        .partitioner("fileProcessorStep", partitioner())
+        .step(fileProcessorStep())
         .listener(batchStepExecutionListener)
         .taskExecutor(taskExecutor())
         .build();
@@ -134,20 +136,22 @@ public class BatchJobConfiguration {
 
   @Bean
   @StepScope
-  @Qualifier("personItemReader")
+  @Qualifier("fileItemReader")
   @DependsOn("partitioner")
-  public FlatFileItemReader<Object> personItemReader(@Value("#{stepExecutionContext['fileName']}") String filename)
+  public FlatFileItemReader<Object> fileItemReader(@Value("#{stepExecutionContext['fileName']}") String filename)
       throws MalformedURLException {
-    log.info("In Reader");
+    log.info("Reader started");
+
+    // Create reader instance
     var fileReader = new FileItemReader();
     return fileReader.createReader(filename);
   }
 
   @Bean
   @StepScope
-  @Qualifier("personItemWriter")
+  @Qualifier("fileItemWriter")
   @DependsOn("partitioner")
-  public FlatFileItemWriter<SalesSummary> personItemWriter(@Value("#{stepExecutionContext[fileName]}") String filename) {
+  public FlatFileItemWriter<SalesSummary> fileItemWriter(@Value("#{stepExecutionContext[fileName]}") String filename) {
 
     String name = filename.replace("file:", "");
     var file = new File(name);
@@ -156,15 +160,15 @@ public class BatchJobConfiguration {
     FileItemWriter writer = new FileItemWriter(file);
     writer.setFooterCallback(writer);
 
+    // Set output file location
     String outputFileName = writer.removeFileExtension(file.getName()) + ".done.txt";
     FileSystemResource outputResource = new FileSystemResource(outputFolder + "/" + outputFileName);
-
-    //Set output file location
     writer.setResource(outputResource);
 
+    // Keep track of output file for corresponding input file
     FileCleanUpService.outputFiles.put(file.getName(), outputFileName);
 
-    //All job repetitions should "append" to same output file
+    //All job repetitions should "re-write" to same output file (if name matches)
     writer.setAppendAllowed(false);
     writer.setLineSeparator("");
     writer.setLineAggregator(new SingleLineAggregator());

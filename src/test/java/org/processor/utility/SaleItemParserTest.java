@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.processor.model.Item;
+import org.processor.model.SaleItem;
 import org.springframework.batch.item.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,7 +20,7 @@ public class SaleItemParserTest {
   @Test
   public void parseSalesItems_successful() {
 
-    List<Item> saleItems = saleItemParser.getSaleItems("[1-10-100;2-30-2.50;3-40-3.10]");
+    List<SaleItem> saleItems = saleItemParser.getSaleItems("[1-10-100;2-30-2.50;3-40-3.10]");
 
 
     assertEquals(3, saleItems.size());

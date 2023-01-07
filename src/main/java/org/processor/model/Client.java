@@ -6,10 +6,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Contains client details
+ * Contains client details.
  */
 @Data
-@Builder@NoArgsConstructor
+@Builder
+@NoArgsConstructor
 @AllArgsConstructor
 public class Client {
 

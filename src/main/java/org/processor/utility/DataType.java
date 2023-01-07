@@ -2,6 +2,9 @@ package org.processor.utility;
 
 import lombok.Getter;
 
+/**
+ * Supported data type codes.
+ */
 @Getter
 public enum DataType {
 

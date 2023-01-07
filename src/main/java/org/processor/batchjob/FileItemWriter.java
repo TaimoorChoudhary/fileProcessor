@@ -10,13 +10,18 @@ import org.processor.service.FileCleanUpService;
 import org.springframework.batch.item.file.FlatFileFooterCallback;
 import org.springframework.batch.item.file.FlatFileItemWriter;
 
-public class FileItemWriter extends FlatFileItemWriter<SalesSummary> implements FlatFileFooterCallback {
+/**
+ * File item writer for file summary.
+ */
+public class FileItemWriter extends FlatFileItemWriter<SalesSummary>
+    implements FlatFileFooterCallback {
 
-  private File file;
-  private SalesSummary salesSummary = new SalesSummary();
+  private final File file;
+  private SalesSummary salesSummary;
 
   public FileItemWriter(File file) {
     this.file = file;
+    salesSummary = new SalesSummary();
   }
 
   @Override
@@ -36,6 +41,12 @@ public class FileItemWriter extends FlatFileItemWriter<SalesSummary> implements 
     }
   }
 
+  /**
+   * Removes file extension from file name.
+   *
+   * @param filename name from which to remove extension
+   * @return file name without extension
+   */
   public String removeFileExtension(String filename) {
     if (filename == null || filename.isEmpty()) {
       return filename;

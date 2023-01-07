@@ -1,0 +1,10 @@
+version: '2'
+services:
+  file-processor:
+    container_name: file-processor
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: fileprocessor:latest
+    ports:
+      - 8080:8080

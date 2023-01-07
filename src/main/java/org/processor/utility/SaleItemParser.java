@@ -3,15 +3,15 @@ package org.processor.utility;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import org.processor.model.Item;
+import org.processor.model.SaleItem;
 import org.springframework.batch.item.ParseException;
 import org.springframework.stereotype.Service;
 
 @Service
 public class SaleItemParser {
 
-  public List<Item> getSaleItems(String rawData) {
-    var saleItems = new ArrayList<Item>();
+  public List<SaleItem> getSaleItems(String rawData) {
+    var saleItems = new ArrayList<SaleItem>();
 
     String updateRawData = rawData.replaceAll("[\\[\\]]", "");
 
@@ -24,12 +24,12 @@ public class SaleItemParser {
     return saleItems;
   }
 
-  private Item constructSaleItem(String saleItemString) {
+  private SaleItem constructSaleItem(String saleItemString) {
 
     var itemValues = saleItemString.split("-");
 
     if (itemValues.length == 3) {
-      return Item.builder()
+      return SaleItem.builder()
           .id(itemValues[0])
           .amount(Integer.parseInt(itemValues[1]))
           .price(new BigDecimal(itemValues[2]))

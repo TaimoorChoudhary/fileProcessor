@@ -11,7 +11,7 @@
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
   <groupId>org.processor</groupId>
-  <artifactId>fileProcessor</artifactId>
+  <artifactId>fileprocessor</artifactId>
   <version>1.0-SNAPSHOT</version>
 
   <properties>

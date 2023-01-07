@@ -7,6 +7,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ * Contains sales summary.
+ */
 @Data
 @Builder
 @NoArgsConstructor
@@ -19,6 +22,11 @@ public class SalesSummary {
   private String lowestSalesSeller;
   private String dataSourceName;
 
+  /**
+   * Check is the model object is empty.
+   *
+   * @return boolean
+   */
   public boolean isEmpty() {
     return sellers == 0 && clients == 0
         && StringUtils.isEmpty(highestSaleId)

@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Contains sale details
+ * Contains sale details.
  */
 @Data
 @Builder
@@ -19,5 +19,5 @@ public class Sale {
   private String id;
   private String itemsRaw;
   private String seller;
-  private List<Item> items;
+  private List<SaleItem> saleItems;
 }

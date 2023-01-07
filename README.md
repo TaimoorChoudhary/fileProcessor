@@ -58,4 +58,9 @@ Files can be directly added to the input directory where they are picked up duri
 files cane be uploaded using the upload rest end-point which places the file in the input directory
 
 ### Viewing file summary
-A simple GET end-point is available which take file name (input file) as a parameter and return the file summary if it is available.
+A simple GET end-point is available which take file name (input file) as a parameter and return the file summary if it is available.  
+
+### Resource
+Sample input files are available in ```resources``` folder which can be copied over into input folder.
+Postman rest api collection is available under ```postman``` folder.  
+Docker and docker-compose files are available in the ```docker``` folder

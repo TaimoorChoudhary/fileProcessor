@@ -18,7 +18,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
 
 /**
- * Cleans up data files after processing
+ * Cleans up data files after processing.
  */
 @Slf4j
 @Service
@@ -37,20 +37,32 @@ public class FileCleanUpService implements Tasklet, InitializingBean {
     errorFiles = new ConcurrentHashMap<>();
   }
 
-  public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
+  /**
+   * Start file clean up process.
+   *
+   * @param contribution StepContribution
+   * @param chunkContext ChunkContext
+   * @return RepeatStatus
+   */
+  public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) {
 
+    // Remove processed input files
     inputFiles.forEach((name, path) -> deleteFile(new File(path)));
 
     outputFiles.forEach((inputFile, outputFile) -> {
 
       if (errorFiles.containsKey(inputFile)) {
 
+        // Remove empty output file corresponding to input file with error
         var fr = new FileSystemResource(outputFolder + "/" + outputFile);
         deleteFile(fr.getFile());
+
+        // Move input file with errors to separate folder
         moveFile(inputFile, errorFiles.get(inputFile));
       }
     });
 
+    // Clear maps for next run
     inputFiles.clear();
     outputFiles.clear();
     errorFiles.clear();

@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * File processor service.
+ */
 @Slf4j
 @Service
 public class FileProcessorService {
@@ -26,7 +29,13 @@ public class FileProcessorService {
   @Autowired
   FileUploadUtility fileUploadUtility;
 
-  public boolean uploadFile(MultipartFile multipartFile) {
+  /**
+   * Save file to input directory.
+   *
+   * @param multipartFile file to save
+   * @return boolean indicating operation success/failure
+   */
+  public boolean saveFile(MultipartFile multipartFile) {
 
     String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
 
@@ -39,10 +48,18 @@ public class FileProcessorService {
     }
   }
 
+  /**
+   * Read summary details for the given input file name.
+   *
+   * @param fileName input file name
+   * @return SalesSummary string
+   * @throws FileNotFoundException FileNotFoundException
+   */
   public String getFileSummary(String fileName) throws FileNotFoundException {
 
     var file = new File(outputFolder + "/" + fileName.replace(".txt", ".done.txt"));
 
+    // Check if output summary file exists
     if (file.exists()) {
       BufferedReader br = new BufferedReader(new FileReader(file));
 
@@ -55,6 +72,8 @@ public class FileProcessorService {
       }
 
     } else {
+
+      // If output file does not exists check for error file
       file = new File(errorFolder + "/" + fileName);
 
       if (file.exists()) {

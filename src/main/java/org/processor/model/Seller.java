@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Contains seller details
+ * Contains seller details.
  */
 @Data
 @Builder
