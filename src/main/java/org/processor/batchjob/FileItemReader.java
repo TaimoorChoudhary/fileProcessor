@@ -49,7 +49,7 @@ public class FileItemReader {
         DataType.SALE.getCode() + "*", saleTokenizer()
     ));
 
-    Map<String, FieldSetMapper<Object>> mappers = new HashMap<>(2);
+    var mappers = new HashMap<String, FieldSetMapper<Object>>(2);
     mappers.put(DataType.SELLER.getCode() + "*", sellerFieldSetMapper());
     mappers.put(DataType.CLIENT.getCode() + "*", clientFieldSetMapper());
     mappers.put(DataType.SALE.getCode() + "*", saleFieldSetMapper());

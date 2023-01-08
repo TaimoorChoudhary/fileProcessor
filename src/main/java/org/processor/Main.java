@@ -12,7 +12,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
 /**
- * Application entry point
+ * Application entry point.
  */
 @Slf4j
 @SpringBootApplication
@@ -40,7 +40,7 @@ public class Main {
     try {
       jobLauncher.run(job, params);
     } catch (Exception e) {
-      log.error(e.getMessage());
+      log.error("Error while starting scheduled batch job" + e.getMessage());
       throw new RuntimeException(e);
     }
   }

@@ -7,7 +7,6 @@ import lombok.Getter;
  */
 @Getter
 public enum DataType {
-
   SELLER("001"),
   CLIENT("002"),
   SALE("003");

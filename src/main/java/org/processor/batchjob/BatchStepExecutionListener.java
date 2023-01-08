@@ -1,6 +1,5 @@
 package org.processor.batchjob;
 
-import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
@@ -21,10 +20,10 @@ public class BatchStepExecutionListener implements StepExecutionListener {
 
   @Override
   public ExitStatus afterStep(StepExecution stepExecution) {
-    List<Throwable> failureExceptions = stepExecution.getFailureExceptions();
+    var failureExceptions = stepExecution.getFailureExceptions();
 
     for (var exception : failureExceptions) {
-      log.error(exception.getMessage());
+      log.error("Error during step executions: " + exception.getMessage());
     }
 
     return null;

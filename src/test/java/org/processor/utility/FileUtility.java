@@ -21,8 +21,8 @@ public class FileUtility {
     try (InputStream inputStream = multipartFile.getInputStream()) {
       Path filePath = uploadPath.resolve(fileName);
       Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-    } catch (IOException ioe) {
-      log.error("unable to create file:" + ioe.getMessage());
+    } catch (IOException e) {
+      log.error("Unable to create file:" + e.getMessage());
     }
   }
 }

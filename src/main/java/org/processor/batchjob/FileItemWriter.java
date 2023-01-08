@@ -32,7 +32,6 @@ public class FileItemWriter extends FlatFileItemWriter<SalesSummary>
 
   @Override
   public void writeFooter(Writer writer) throws IOException {
-
     if (!salesSummary.isEmpty()) {
       writer.write(salesSummary.toString());
       FileCleanUpService.inputFiles.put(file.getName(), file.getCanonicalPath());
@@ -52,7 +51,7 @@ public class FileItemWriter extends FlatFileItemWriter<SalesSummary>
       return filename;
     }
 
-    String extPattern = "(?<!^)[.]" + "[^.]*$";
+    var extPattern = "(?<!^)[.]" + "[^.]*$";
     return filename.replaceAll(extPattern, "");
   }
 }

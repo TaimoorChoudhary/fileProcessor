@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.util.FileSystemUtils;
 
 @SpringBootTest
 public class FileCleanUpServiceTest {
@@ -20,33 +21,27 @@ public class FileCleanUpServiceTest {
 
   @Value("${batchJob.input:input}")
   private String inputFolder;
-
   @Value("${batchJob.output:output}")
   private String outputFolder;
   @Value("${batchJob.error:errorFiles}")
-  private String errorFolder; //errorFiles
+  private String errorFolder;
 
-  private FileUtility fileUtility = new FileUtility();
+  private final FileUtility fileUtility = new FileUtility();
 
   @AfterEach
   public void cleanUpEach() {
-    var inputFile = new File(inputFolder + "/testFile.txt");
-    var inputFile2 = new File(inputFolder + "/testFile2.txt");
-    var outputFile = new File(outputFolder + "/testFile.done.txt");
-    var outputFile2 = new File(outputFolder + "/testFile2.done.txt");
-    var errorFile = new File(errorFolder + "/testFile2.txt");
-
-    inputFile.delete();
-    inputFile2.delete();
-    outputFile.delete();
-    outputFile2.delete();
-    errorFile.delete();
+    FileSystemUtils.deleteRecursively(new File(inputFolder));
+    FileSystemUtils.deleteRecursively(new File(outputFolder));
+    FileSystemUtils.deleteRecursively(new File(errorFolder));
   }
 
   @Test
   public void fileCleanupWithErrorFiles() {
 
-    var multipartFile = new MockMultipartFile("data", "filename.txt", "text/plain",
+    var multipartFile = new MockMultipartFile(
+        "data",
+        "filename.txt",
+        "text/plain",
         "some text".getBytes());
 
     fileUtility.saveFile("testFile.txt", multipartFile, inputFolder);

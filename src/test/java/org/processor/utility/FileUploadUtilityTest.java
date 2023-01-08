@@ -31,7 +31,10 @@ public class FileUploadUtilityTest {
   @Test
   public void parseSalesItems_successful() throws IOException {
 
-    var multipartFile = new MockMultipartFile("data", "filename.txt", "text/plain",
+    var multipartFile = new MockMultipartFile(
+        "data",
+        "filename.txt",
+        "text/plain",
         "some text".getBytes());
 
     fileUploadUtility.saveFile("testFile.txt", multipartFile);

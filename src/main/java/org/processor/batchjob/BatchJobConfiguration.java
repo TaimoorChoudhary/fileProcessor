@@ -26,7 +26,6 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 /**
@@ -62,7 +61,7 @@ public class BatchJobConfiguration {
   private String outputFolder;
 
   @Bean
-  public Job fileProcessingJob(Step step1) {
+  public Job fileProcessingJob(Step fileProcessorStep) {
     return jobBuilderFactory.get("fileProcessingJob")
         .incrementer(new RunIdIncrementer())
         .flow(masterStep())
@@ -76,14 +75,14 @@ public class BatchJobConfiguration {
   public Partitioner partitioner() {
     log.info("Partitioner Started");
 
-    MultiResourcePartitioner partitioner = new MultiResourcePartitioner();
-    ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+    var partitioner = new MultiResourcePartitioner();
+    var resolver = new PathMatchingResourcePatternResolver();
     Resource[] resources = null;
     try {
 
       resources = resolver.getResources("file:" + inputFolder + "/*.txt");
     } catch (IOException e) {
-      log.error(e.getMessage());
+      log.error("Error while starting partitioner" + e.getMessage());
     }
     partitioner.setResources(resources);
     partitioner.partition(10);
@@ -115,7 +114,7 @@ public class BatchJobConfiguration {
 
   @Bean
   public ThreadPoolTaskExecutor taskExecutor() {
-    ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
+    var taskExecutor = new ThreadPoolTaskExecutor();
     taskExecutor.setMaxPoolSize(10);
     taskExecutor.setCorePoolSize(10);
     taskExecutor.setQueueCapacity(10);
@@ -138,7 +137,8 @@ public class BatchJobConfiguration {
   @StepScope
   @Qualifier("fileItemReader")
   @DependsOn("partitioner")
-  public FlatFileItemReader<Object> fileItemReader(@Value("#{stepExecutionContext['fileName']}") String filename)
+  public FlatFileItemReader<Object> fileItemReader(
+      @Value("#{stepExecutionContext['fileName']}") String filename)
       throws MalformedURLException {
     log.info("Reader started");
 
@@ -151,18 +151,19 @@ public class BatchJobConfiguration {
   @StepScope
   @Qualifier("fileItemWriter")
   @DependsOn("partitioner")
-  public FlatFileItemWriter<SalesSummary> fileItemWriter(@Value("#{stepExecutionContext[fileName]}") String filename) {
+  public FlatFileItemWriter<SalesSummary> fileItemWriter(
+      @Value("#{stepExecutionContext[fileName]}") String filename) {
 
-    String name = filename.replace("file:", "");
+    var name = filename.replace("file:", "");
     var file = new File(name);
 
     //Create writer instance
-    FileItemWriter writer = new FileItemWriter(file);
+    var writer = new FileItemWriter(file);
     writer.setFooterCallback(writer);
 
     // Set output file location
-    String outputFileName = writer.removeFileExtension(file.getName()) + ".done.txt";
-    FileSystemResource outputResource = new FileSystemResource(outputFolder + "/" + outputFileName);
+    var outputFileName = writer.removeFileExtension(file.getName()) + ".done.txt";
+    var outputResource = new FileSystemResource(outputFolder + "/" + outputFileName);
     writer.setResource(outputResource);
 
     // Keep track of output file for corresponding input file

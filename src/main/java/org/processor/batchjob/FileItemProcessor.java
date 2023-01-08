@@ -38,7 +38,7 @@ public class FileItemProcessor implements ItemProcessor<Object, SalesSummary> {
   @Override
   public SalesSummary process(final Object data) throws Exception {
 
-    log.debug(data.toString());
+    log.debug("Processing data: " + data.toString());
 
     if (data instanceof Seller) {
       sellers++;

@@ -27,6 +27,9 @@ public class FileCleanUpService implements Tasklet, InitializingBean {
   @Value("${batchJob.output:output}")
   private String outputFolder;
 
+  @Value("${batchJob.error:errorFiles}")
+  private String errorFolder;
+
   public static ConcurrentMap<String, String> inputFiles;
   public static ConcurrentMap<String, String> outputFiles;
   public static ConcurrentMap<String, String> errorFiles;
@@ -45,7 +48,6 @@ public class FileCleanUpService implements Tasklet, InitializingBean {
    * @return RepeatStatus
    */
   public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) {
-
     // Remove processed input files
     inputFiles.forEach((name, path) -> deleteFile(new File(path)));
 
@@ -72,13 +74,11 @@ public class FileCleanUpService implements Tasklet, InitializingBean {
 
   @Override
   public void afterPropertiesSet() throws Exception {
-
   }
 
   private void deleteFile(File file) {
-
     if (file.exists()) {
-      boolean deleted = file.delete();
+      var deleted = file.delete();
       if (!deleted) {
         log.error("Could not delete file " + file.getPath());
       }
@@ -86,16 +86,15 @@ public class FileCleanUpService implements Tasklet, InitializingBean {
   }
 
   private void moveFile(String fileName, String filePath) {
-
     try {
 
       // Create directory for error files if it does not exist
-      new File("errorFiles").mkdirs();
+      new File(errorFolder).mkdirs();
 
-      Files.move(Paths.get(filePath), Paths.get("errorFiles/" + fileName),
+      Files.move(Paths.get(filePath), Paths.get( errorFolder + "/" + fileName),
           StandardCopyOption.REPLACE_EXISTING);
     } catch (IOException e) {
-      log.error(e.getMessage());
+      log.error("Could not move error file " + e.getMessage());
     }
   }
 }

@@ -5,7 +5,7 @@ logging:
     org.processor: DEBUG
 
 batchJob:
-  input: input
-  output: output2
-  error: errorFiles
+  input: input-test
+  output: output-test
+  error: errorFiles-test
   cron: 0 */10 * * * ?

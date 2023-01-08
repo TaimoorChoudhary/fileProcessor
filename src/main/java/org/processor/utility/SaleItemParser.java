@@ -7,13 +7,22 @@ import org.processor.model.SaleItem;
 import org.springframework.batch.item.ParseException;
 import org.springframework.stereotype.Service;
 
+/**
+ * Handles parsing of sale items
+ */
 @Service
 public class SaleItemParser {
 
+  /**
+   * Extracts sale items details.
+   *
+   * @param rawData data to parse
+   * @return List of {@link SaleItem}
+   */
   public List<SaleItem> getSaleItems(String rawData) {
     var saleItems = new ArrayList<SaleItem>();
 
-    String updateRawData = rawData.replaceAll("[\\[\\]]", "");
+    var updateRawData = rawData.replaceAll("[\\[\\]]", "");
 
     var saleItemsString = updateRawData.split(";");
 
@@ -25,7 +34,6 @@ public class SaleItemParser {
   }
 
   private SaleItem constructSaleItem(String saleItemString) {
-
     var itemValues = saleItemString.split("-");
 
     if (itemValues.length == 3) {

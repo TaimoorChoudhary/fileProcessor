@@ -12,13 +12,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/sample-data3.txt",
+					"raw": "http://localhost:8080/file/summary/sample-data3.txt",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
+						"file/summary",
 						"sample-data3.txt"
 					]
 				}
@@ -41,14 +42,14 @@
 					]
 				},
 				"url": {
-					"raw": "http://localhost:8080/uploadFile",
+					"raw": "http://localhost:8080/file/upload",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"uploadFile"
+						"file/upload"
 					]
 				}
 			},

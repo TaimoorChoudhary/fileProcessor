@@ -36,14 +36,13 @@ public class FileProcessorService {
    * @return boolean indicating operation success/failure
    */
   public boolean saveFile(MultipartFile multipartFile) {
-
-    String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+    var fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
 
     try {
       fileUploadUtility.saveFile(fileName, multipartFile);
       return true;
     } catch (IOException e) {
-      log.error(e.getMessage());
+      log.error("Error while saving input file: " + e.getMessage());
       return false;
     }
   }
@@ -56,18 +55,17 @@ public class FileProcessorService {
    * @throws FileNotFoundException FileNotFoundException
    */
   public String getFileSummary(String fileName) throws FileNotFoundException {
-
     var file = new File(outputFolder + "/" + fileName.replace(".txt", ".done.txt"));
 
     // Check if output summary file exists
     if (file.exists()) {
-      BufferedReader br = new BufferedReader(new FileReader(file));
+      var br = new BufferedReader(new FileReader(file));
 
       try {
         // reading a single line as the output files have summary written in one line only
         return br.readLine();
       } catch (IOException e) {
-        log.error(e.getMessage());
+        log.error("Error while reading summary file" + e.getMessage());
         return "ERROR: Error reading file summary";
       }
 
@@ -80,7 +78,6 @@ public class FileProcessorService {
         return "ERROR: There was an error processing the file, summary is not available";
       }
     }
-
     return "";
   }
 }

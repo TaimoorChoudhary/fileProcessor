@@ -6,6 +6,6 @@ logging:
 
 batchJob:
   input: input
-  output: output2
+  output: output
   error: errorFiles
   cron: 0 */10 * * * ?

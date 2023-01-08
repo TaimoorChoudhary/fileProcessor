@@ -17,7 +17,6 @@ public class SingleLineAggregator extends PassThroughLineAggregator<SalesSummary
    */
   @Override
   public String aggregate(SalesSummary salesSummary) {
-
     return "";
   }
 

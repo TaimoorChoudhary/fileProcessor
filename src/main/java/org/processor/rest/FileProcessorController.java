@@ -19,7 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @Slf4j
 @RestController
-@RequestMapping()
+@RequestMapping("/file")
 public class FileProcessorController {
 
   @Autowired
@@ -31,14 +31,13 @@ public class FileProcessorController {
    * @param multipartFile file to upload
    * @return ResponseEntity
    */
-  @PostMapping("/uploadFile")
+  @PostMapping("/upload")
   public ResponseEntity<String> uploadFile(
       @RequestParam("file") MultipartFile multipartFile) {
-
-    String fileExtensions = ".txt";
-    String fileName = multipartFile.getOriginalFilename();
-    int lastIndex = fileName.lastIndexOf('.');
-    String substring = fileName.substring(lastIndex, fileName.length());
+    var fileExtensions = ".txt";
+    var fileName = multipartFile.getOriginalFilename();
+    var lastIndex = fileName.lastIndexOf('.');
+    var substring = fileName.substring(lastIndex, fileName.length());
 
     log.info("File received for upload: " + fileName);
 
@@ -70,16 +69,15 @@ public class FileProcessorController {
    * @param fileName input file name
    * @return ResponseEntity
    */
-  @GetMapping("/{fileName}")
+  @GetMapping("/summary/{fileName}")
   public ResponseEntity<String> getSummary(@PathVariable("fileName") String fileName) {
-
     try {
-      String fileSummary = fileProcessorService.getFileSummary(fileName);
+      var fileSummary = fileProcessorService.getFileSummary(fileName);
 
       if (fileSummary.isBlank() || fileSummary.contains("ERROR:")) {
 
         var message = fileSummary.isBlank()
-            ? "Unable to process request, summary file not found"
+            ? "Unable to process request, summary file not found."
             : fileSummary;
 
         log.debug(message);
