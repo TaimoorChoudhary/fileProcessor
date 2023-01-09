@@ -6,7 +6,8 @@ outputting the results in a different file.
 ## Running the application
 Application is built using Java open jdk version 11. The application can be run using the following commands:  
 - Maven is installed locally: ```mvn spring-boot:run```  
-- Maven is not installed: ```./mvnw spring-boot:run```  
+- Maven is not installed: ```./mvnw spring-boot:run```   
+  - (for Windows machine ```mvnw spring-boot:run```)  
 
 Alternatively the application can be executed using the provided docker file. To do so navigate to the docker folder 
 and run the command ```docker compose up```.  
