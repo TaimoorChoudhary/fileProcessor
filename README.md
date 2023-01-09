@@ -76,4 +76,4 @@ A simple GET end-point is available which take file name (input file) as a param
 ### Resource
 Sample input files are available in ```resources``` folder which can be copied over into input folder.
 Postman rest api collection is available under ```postman``` folder.  
-Docker and docker-compose files are available in the ```docker``` folder
+Docker and docker-compose files are available in the ```docker``` folder.

@@ -30,10 +30,28 @@ public class SaleItemParserTest {
   }
 
   @Test
-  public void parseSalesItems_invalidFormat() {
+  public void parseSalesItems_invalidData() {
 
     var exception = Assertions.assertThrows(ParseException.class, () -> {
       saleItemParser.getSaleItems("[1-10100;2-30-2.50;3-40-3.10]");
+    });
+
+    Assertions.assertEquals("Unable to parse sale items, invalid format", exception.getMessage());
+  }
+
+  @Test
+  public void parseSalesItems_invalidFormatEmptyData() {
+    var exception = Assertions.assertThrows(ParseException.class, () -> {
+      saleItemParser.getSaleItems("[]");
+    });
+
+    Assertions.assertEquals("Unable to parse sale items, invalid format", exception.getMessage());
+  }
+
+  @Test
+  public void parseSalesItems_invalidFormat() {
+    var exception = Assertions.assertThrows(ParseException.class, () -> {
+      saleItemParser.getSaleItems("1-101-10;2-30-2.50;3-40-3.10");
     });
 
     Assertions.assertEquals("Unable to parse sale items, invalid format", exception.getMessage());

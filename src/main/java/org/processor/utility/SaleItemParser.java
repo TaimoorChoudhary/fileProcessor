@@ -22,6 +22,10 @@ public class SaleItemParser {
   public List<SaleItem> getSaleItems(String rawData) {
     var saleItems = new ArrayList<SaleItem>();
 
+    if (!rawData.startsWith("[") || !rawData.endsWith("]")) {
+      throw new ParseException("Unable to parse sale items, invalid format");
+    }
+
     var updateRawData = rawData.replaceAll("[\\[\\]]", "");
 
     var saleItemsString = updateRawData.split(";");

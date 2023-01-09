@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.util.FileSystemUtils;
 
 @SpringBootTest
 public class FileUploadUtilityTest {
@@ -22,10 +23,7 @@ public class FileUploadUtilityTest {
 
   @AfterEach
   public void cleanUpEach() {
-    var file = new File(inputFolder + "/testFile.txt");
-    if (file.exists()) {
-      file.delete();
-    }
+    FileSystemUtils.deleteRecursively(new File(inputFolder));
   }
 
   @Test
