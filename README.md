@@ -4,7 +4,7 @@ You should develop a small application that receive files as parameter, extract 
 outputting the results in a different file.
 
 ## Running the application
-The application can be run using the following commands:  
+Application is built using Java open jdk version 11. The application can be run using the following commands:  
 - Maven is installed locally: ```mvn spring-boot:run```  
 - Maven is not installed: ```./mvnw spring-boot:run```  
 
