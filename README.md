@@ -1,28 +1,5 @@
 # File Processor
-## Problem description
-You should develop a small application that receive files as parameter, extract its content, 
-outputting the results in a different file.
-
-## Running the application
-Application is built using Java open jdk version 11. The application can be run using the following commands:  
-- Maven is installed locally: ```mvn spring-boot:run```  
-- Maven is not installed: ```./mvnw spring-boot:run```   
-  - (for Windows machine ```mvnw spring-boot:run```)  
-
-Alternatively the application can be executed using the provided docker file. To do so navigate to the docker folder 
-and run the command ```docker compose up```.  
-
-Once the application is successfully started it can be accessed through two REST end-points.  
-**File upload:**   
-```POST``` request at ```localhost:8080/file/upload```.  
-It takes a request parameter named ´file´ which should be a txt file. This rest end-point uploads the provided
-file to folder from which the file is picked up for processing.  
-**File summary:**   
-```GET``` request at ```localhost:8080/file/summary/{filename}```.   
-The path parameter ```filename``` should be the name of the input file for which the summary is to be retrieved. 
-If the input file name is correct and the input file was successfully processed the file summary will be 
-returned as a simple string message.  
-
+A small application which uses Spring Batch to process files and extract information.  
 
 ## Architecture
 The application uses Spring Batch partition processing to read input files in parallel and extracts
@@ -77,4 +54,26 @@ A simple GET end-point is available which take file name (input file) as a param
 ### Resource
 Sample input files are available in ```resources``` folder which can be copied over into input folder.
 Postman rest api collection is available under ```postman``` folder.  
-Docker and docker-compose files are available in the ```docker``` folder.
+Docker and docker-compose files are available in the ```docker``` folder.  
+
+## Running the application
+Application is built using Java open jdk version 11. The application can be run using the following commands:  
+- Maven is installed locally: ```mvn spring-boot:run```  
+- Maven is not installed: ```./mvnw spring-boot:run```   
+  - (for Windows machine ```mvnw spring-boot:run```)  
+
+Alternatively the application can be executed using the provided docker file. To do so navigate to the docker folder 
+and run the command ```docker compose up```.  
+
+Once the application is successfully started it can be accessed through two REST end-points.  
+
+**File upload:**   
+```POST``` request at ```localhost:8080/file/upload```.  
+It takes a request parameter named ´file´ which should be a txt file. This rest end-point uploads the provided
+file to folder from which the file is picked up for processing.  
+
+**File summary:**   
+```GET``` request at ```localhost:8080/file/summary/{filename}```.   
+The path parameter ```filename``` should be the name of the input file for which the summary is to be retrieved. 
+If the input file name is correct and the input file was successfully processed the file summary will be 
+returned as a simple string message.  
